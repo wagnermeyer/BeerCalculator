@@ -17,14 +17,7 @@
 		name: 'app',
         data: function() {
             return {
-                beers: [
-                    {
-                        name: 'Teste',
-                        size: 200,
-                        price: 1.98,
-                        isCheapest: false
-                    }
-                ],
+                beers: [],
                 cheapestPrice: null,
                 edit: {
                     openModal: false,
@@ -95,4 +88,9 @@
     html {
         margin: 0;
     }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
 </style>

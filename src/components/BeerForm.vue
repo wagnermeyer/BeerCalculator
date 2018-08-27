@@ -2,7 +2,7 @@
     <div>
         <form @submit="defineMethod">
             <input class="input" type="text" placeholder="Beer name" v-model="beerData.name"><br>
-            <input class="input" type="text" placeholder="Ml" v-model="beerData.size"><br>
+            <input class="input" type="number" placeholder="Ml" v-model="beerData.size"><br>
             <input class="input" type="text" placeholder="Price" v-model="beerData.price"><br>
             <button type="submit" class="button">{{ editingBeer !== null ? 'Salvar' : 'Adicionar' }}</button>
         </form>
