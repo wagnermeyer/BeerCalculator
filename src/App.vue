@@ -1,28 +1,98 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <Modal v-if="edit.openModal">
+            <BeerForm @updateBeers="editBeerInArray" :editingBeer="beers[edit.beerIndex]"></BeerForm>
+        </Modal>
+        <BeerForm @updateBeers="addBeerToArray"/>
+        <ListBeers :beers="beers" @updateBeers="removeBeerFromArray" @modal="openModal"/>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    import BeerForm from './components/BeerForm';
+    import ListBeers from './components/ListBeers';
+    import Modal from './components/Modal';
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+	export default {
+		name: 'app',
+        data: function() {
+            return {
+                beers: [
+                    {
+                        name: 'Teste',
+                        size: 200,
+                        price: 1.98,
+                        isCheapest: false
+                    }
+                ],
+                cheapestPrice: null,
+                edit: {
+                    openModal: false,
+                    beerIndex: null,
+                    newBeerData: {}
+                }
+            }
+        },
+        methods: {
+            //METHOD: Add beer to array
+            addBeerToArray: function(obj) {
+                //Add beer to array
+                this.beers.unshift(obj);
+                this.defCheapestBeers();
+            },
+            //METHOD: Remove beer from array
+            removeBeerFromArray: function(i) {
+                this.beers.splice(i, 1); //Remove from array
+                this.cheapestPrice = null; //Define cheapestPrice to null again
+                this.defCheapestBeers(); //Run method
+            },
+            //METHOD: Edit beer
+            editBeerInArray: function(editedBeer) {
+                this.beers[this.edit.beerIndex].name = editedBeer.name;
+                this.beers[this.edit.beerIndex].size = editedBeer.size;
+                this.beers[this.edit.beerIndex].price = editedBeer.price;
+                this.edit.openModal = false;
+                this.cheapestPrice = null;
+                this.defCheapestBeers();
+            },
+            //METHOD: Open modal
+            openModal: function(i) {
+                this.edit.openModal = true;
+                this.edit.beerIndex = i;
+            },
+            //METHOD: Calculate liter price
+            calcLiterPrice: function(size, price) {
+                return ((price/size) * 1000).toFixed(2);
+            },
+            //METHOD: Define cheapest beers
+            defCheapestBeers: function() {
+                //Calculate each price per liter and define the lowest price
+                for (let beer of this.beers) {
+                    beer.isCheapest = false;
+                    beer.literPrice = this.calcLiterPrice(beer.size, beer.price);
+                    if (this.cheapestPrice === null || parseFloat(this.cheapestPrice) >= parseFloat(beer.literPrice)) {
+                        this.cheapestPrice = beer.literPrice;
+                    }
+                }
+                //Mark each beer with lowest beer
+                for (let beer of this.beers) {
+                    if (parseFloat(this.cheapestPrice) >= parseFloat(beer.literPrice)) {
+                        beer.isCheapest = true
+                    }
+                }
+            }
+        },
+		components: {
+			BeerForm,
+            ListBeers,
+            Modal
+		}
+	}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+    body,
+    html {
+        margin: 0;
+    }
 </style>
