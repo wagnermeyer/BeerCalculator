@@ -9,7 +9,7 @@
         </ul> -->
         <ul>
             <li v-for="(beer, i) in beers" :key="i">
-                {{ beer.name }} | {{ beer.size }}ml | R${{ beer.price }} | {{ beer.literPrice }} | {{ beer.isCheapest }}
+                {{ beer.name }} | {{ beer.size }}ml | R${{ floatToPrice(beer.price) }} | R${{ floatToPrice(beer.literPrice) }} | {{ beer.isCheapest }}
                 <button @click="openModal($event, i)">Edit</button>
                 <button @click="removeBeer($event, i)">Remove</button>
             </li>
@@ -29,6 +29,13 @@
             openModal: function(e, i) {
                 e.preventDefault();
                 this.$emit('modal', i);
+            },
+            //METHOD: Convert float to price
+            floatToPrice: function(val) {
+                return val.toLocaleString('pt-br', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
             }
         }
     }

@@ -2,14 +2,16 @@
     <div>
         <form @submit="defineMethod">
             <input class="input" type="text" placeholder="Beer name" v-model="beerData.name"><br>
-            <input class="input" type="number" placeholder="Ml" v-model="beerData.size"><br>
-            <input class="input" type="text" placeholder="Price" v-model="beerData.price"><br>
+            <input class="input" type="text" placeholder="Ml" v-model="beerData.size" v-mask="'9999'"><br>
+            <input class="input" type="text" placeholder="Price" v-model="beerData.price" v-mask="'money'"><br>
             <button type="submit" class="button">{{ editingBeer !== null ? 'Salvar' : 'Adicionar' }}</button>
         </form>
     </div>
 </template>
 
 <script>
+    import AwesomeMask from 'awesome-mask';
+
     export default {
         name: 'BeerForm',
         props: {
@@ -57,6 +59,9 @@
             if (this.edit.obj !== null) {
                 this.beerData = Object.assign({}, this.editingBeer);
             }
+        },
+        directives: {
+            'mask': AwesomeMask
         }
     }
 </script>

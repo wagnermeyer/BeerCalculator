@@ -5,6 +5,7 @@
         </Modal>
         <BeerForm @updateBeers="addBeerToArray"/>
         <ListBeers :beers="beers" @updateBeers="removeBeerFromArray" @modal="openModal"/>
+        {{ beers }}
     </div>
 </template>
 
@@ -30,7 +31,12 @@
             //METHOD: Add beer to array
             addBeerToArray: function(obj) {
                 //Add beer to array
-                this.beers.unshift(obj);
+                this.beers.unshift({
+                    name: obj.name,
+                    size: parseInt(obj.size),
+                    price: this.priceToFloat(obj.price),
+                    isCheapest: false
+                });
                 this.defCheapestBeers();
             },
             //METHOD: Remove beer from array
@@ -43,7 +49,7 @@
             editBeerInArray: function(editedBeer) {
                 this.beers[this.edit.beerIndex].name = editedBeer.name;
                 this.beers[this.edit.beerIndex].size = editedBeer.size;
-                this.beers[this.edit.beerIndex].price = editedBeer.price;
+                this.beers[this.edit.beerIndex].price = this.priceToFloat(editedBeer.price);
                 this.edit.openModal = false;
                 this.cheapestPrice = null;
                 this.defCheapestBeers();
@@ -55,7 +61,7 @@
             },
             //METHOD: Calculate liter price
             calcLiterPrice: function(size, price) {
-                return ((price/size) * 1000).toFixed(2);
+                return parseFloat(((price/size) * 1000).toFixed(2));
             },
             //METHOD: Define cheapest beers
             defCheapestBeers: function() {
@@ -63,7 +69,7 @@
                 for (let beer of this.beers) {
                     beer.isCheapest = false;
                     beer.literPrice = this.calcLiterPrice(beer.size, beer.price);
-                    if (this.cheapestPrice === null || parseFloat(this.cheapestPrice) >= parseFloat(beer.literPrice)) {
+                    if (this.cheapestPrice === null || this.cheapestPrice >= beer.literPrice) {
                         this.cheapestPrice = beer.literPrice;
                     }
                 }
@@ -73,6 +79,10 @@
                         beer.isCheapest = true
                     }
                 }
+            },
+            //METHOD: Convert price to float
+            priceToFloat: function(val) {
+                return parseFloat(parseFloat(val.replace(".","").replace(",", ".")));
             }
         },
 		components: {
