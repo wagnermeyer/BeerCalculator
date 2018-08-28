@@ -7,8 +7,8 @@
                 <h3 class="beer-card__price">R$7,00</h3>
             </li>
         </ul> -->
-        <ul>
-            <li v-for="(beer, i) in beers" :key="i">
+        <ul class="beers-list">
+            <li class="beer-card" v-for="(beer, i) in beers" :key="i">
                 {{ beer.name }} | {{ beer.size }}ml | R${{ floatToPrice(beer.price) }} | R${{ floatToPrice(beer.literPrice) }} | {{ beer.isCheapest }}
                 <button @click="openModal($event, i)">Edit</button>
                 <button @click="removeBeer($event, i)">Remove</button>
@@ -29,13 +29,6 @@
             openModal: function(e, i) {
                 e.preventDefault();
                 this.$emit('modal', i);
-            },
-            //METHOD: Convert float to price
-            floatToPrice: function(val) {
-                return val.toLocaleString('pt-br', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
             }
         }
     }

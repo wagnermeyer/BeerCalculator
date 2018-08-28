@@ -5,7 +5,6 @@
         </Modal>
         <BeerForm @updateBeers="addBeerToArray"/>
         <ListBeers :beers="beers" @updateBeers="removeBeerFromArray" @modal="openModal"/>
-        {{ beers }}
     </div>
 </template>
 
@@ -79,10 +78,6 @@
                         beer.isCheapest = true
                     }
                 }
-            },
-            //METHOD: Convert price to float
-            priceToFloat: function(val) {
-                return parseFloat(parseFloat(val.replace(".","").replace(",", ".")));
             }
         },
 		components: {

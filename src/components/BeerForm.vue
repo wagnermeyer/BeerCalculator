@@ -58,6 +58,7 @@
         created: function() {
             if (this.edit.obj !== null) {
                 this.beerData = Object.assign({}, this.editingBeer);
+                this.beerData.price = this.floatToPrice(this.beerData.price);
             }
         },
         directives: {
